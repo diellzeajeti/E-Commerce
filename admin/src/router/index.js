@@ -6,6 +6,8 @@ import Products from "../views/Products.vue";
 import RequestPassword from "../views/RequestPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import store from '../store'
+import NotFound from "../views/NotFound.vue";
+
 const routes = [
     {
         path: '/login',
@@ -32,6 +34,8 @@ const routes = [
         },
         component: ResetPassword
     },
+      
+
     {
         path: '/app',
         name:'app',
@@ -52,6 +56,11 @@ const routes = [
               }
         ]
     },
+    {
+        path:'/:pathMatch(.*)',
+        name:'notfound',
+        component:NotFound,
+    }
 ];
 
 const router = createRouter({
