@@ -5,6 +5,7 @@ import Dashboard from "../views/Dashboard.vue";
 import Products from "../views/Products.vue";
 import RequestPassword from "../views/RequestPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
+import NotFound from "../views/NotFound.vue";
 
 const routes = [
     {
@@ -22,6 +23,8 @@ const routes = [
         name: 'resetPassword',
         component: ResetPassword
     },
+      
+
     {
         path: '/app',
         name:'app',
@@ -39,6 +42,11 @@ const routes = [
               }
         ]
     },
+    {
+        path:'/:pathMatch(.*)',
+        name:'notfound',
+        component:NotFound,
+    }
 
 
 ];
