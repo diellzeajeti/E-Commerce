@@ -69,7 +69,6 @@
 import {MenuIcon, LogoutIcon, UserIcon} from '@heroicons/vue/outline'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
-import { logout } from '../store/actions';
 import store from '../store';
 import router from '../router';
 
