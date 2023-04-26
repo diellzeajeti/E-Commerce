@@ -73,10 +73,10 @@ import { logout } from '../store/actions';
 import store from '../store';
 import router from '../router';
 
-const emit = defineEmits(['toggle-sidebar']);
+const emit = defineEmits(['toggle-sidebar'])
 
 function logout(){
-  store.dispatcher('logout')
+  store.dispatch('logout')
   .then(() => {
     debugger;
     router.push({name:'login'})
