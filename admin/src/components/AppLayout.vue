@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-full bg-gray-200 flex">
+    <div v-if="currentUser.id" class="min-h-full bg-gray-200 flex">
             <!-- Sidebar -->
     
            <Sidebar :class="{'-ml-[200px]': !sidebarOpened}"/>
@@ -14,19 +14,30 @@
                 <!-- / Content-->
             </div>
         </div>
+        <div v-else>
+            
+        </div>
     </template>
     
     <script setup>
+    import {ref, computed, onMounted, onUnmounted} from 'vue'
     import {ref, onMounted, onUnmounted} from 'vue'
+    import {ref, computed, onMounted, onUnmounted} from 'vue'
     import Sidebar from './Sidebar.vue';
     import Navbar from "./Navbar.vue";
     import store from "../store";
+    import {computed} from "vue";
+    import {computed} from "vue";
     
         const {title} = defineProps({
             title: String
         });
         const sidebarOpened = ref(true);
+        const currentUser = computed(() => store.state.user.data);
+        const currentUser = computed(() => store.state.user.data);
+        
 
+        
         function toggleSidebar() {
          sidebarOpened.value = !sidebarOpened.value
         }
