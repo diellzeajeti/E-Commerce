@@ -21,20 +21,16 @@
     
     <script setup>
     import {ref, computed, onMounted, onUnmounted} from 'vue'
-    import {ref, onMounted, onUnmounted} from 'vue'
-    import {ref, computed, onMounted, onUnmounted} from 'vue'
     import Sidebar from './Sidebar.vue';
     import Navbar from "./Navbar.vue";
     import store from "../store";
-    import {computed} from "vue";
-    import {computed} from "vue";
     
         const {title} = defineProps({
             title: String
         });
         const sidebarOpened = ref(true);
         const currentUser = computed(() => store.state.user.data);
-        const currentUser = computed(() => store.state.user.data);
+       
         
 
         
