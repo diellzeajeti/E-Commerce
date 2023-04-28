@@ -5,7 +5,7 @@ const state = {
     },
     products:{
          loading:false,
-         date: [],
+         data: [],
          links: [],
          from: null,
          to: null,
