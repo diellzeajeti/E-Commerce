@@ -4,10 +4,11 @@
     <button type="submit"
       class="flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
     >
-
+    Add new Product
     </button>
   </div>
   <div class="bg-white p-4 rounded-lg shadow">
+    {{ search }}
 <div class="flex justify-betweeen border-b-2 pb-3">
     <div class="flex items-center">
     <span class="whitespace-nowrap  mr-3">Per Page</span>
@@ -28,8 +29,8 @@
 </div>
      <Spinner v-if="products.loading"/>
      <template v-else>
-        <tabel class="table-auto w-full">
-      <thread>
+        <table class="table-auto w-full">
+      <thead>
             <tr>
                 <th class="border-b-2 p-2 text-left">10</th>
                 <th class="border-b-2 p-2 text-left">Image</th>
@@ -37,34 +38,48 @@
                 <th class="border-b-2 p-2 text-left">Price</th>
                 <th class="border-b-2 p-2 text-left">Last Update At</th>
             </tr>
-      </thread>
+      </thead>
       <tbody>
             <tr v-for="product of products.data">
             <td class="border-b p-2">{{ product.id }}</td>
             <td class="border-b p-2">
                 <img class="w-16" :src="product.image" :alt="product.title">
               </td>
-              <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{
-               product.title 
-               }}
+              <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+                {{ product.title }}
         
               </td>
               <td class="border-b p-2">
                {{ product.price }}
               </td>
               <td class="border-b p-2">
-                 {{ product.update_at }}
+                 {{ product.updated_at }}
               </td>
             </tr>
       </tbody>
-        </tabel>
+        </table>
 
      </template>
     </div>
  </template>
  
  <script setup>
- 
+ import {computed, onMounted, ref} from 'vue';
+ import store from '../store/index.js';
+ import Spinner from '../components/core/Spinner.vue';
+ import {PRODUCTS_PER_PAGE} from "../constants.js";
+
+ const perPage = ref(PRODUCTS_PER_PAGE)
+ const search = ref('')
+ const products = computed(() => store.state.products)
+
+ onMounted(() => {
+    getProducts();
+ })
+
+ function getProducts(){
+    store.dispatch('getProducts')
+ }
 
  </script>
  
