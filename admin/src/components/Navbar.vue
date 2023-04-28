@@ -71,6 +71,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
 import store from '../store';
 import { useRouter} from 'vue-router';
+import {computed} from "vue";
 
 const router = useRouter()
 

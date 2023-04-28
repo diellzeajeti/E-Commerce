@@ -61,20 +61,20 @@
         function toggleSidebar() {
          sidebarOpened.value = !sidebarOpened.value
         }
-
+        
+        function handleSidebarOpened(){
+            sidebarOpened.value = window.outerWidth > 768;
+        }
         onMounted(() => {
+          store.dispatch('getUser')
             handleSidebarOpened();
             window.addEventListener('resize', handleSidebarOpened);
         })
 
         onUnmounted(() => {
-            store.dispatch('getUser')
-            updateSidebarState();
             window.removeEventListener('resize', handleSidebarOpened);
         })
-        function handleSidebarOpened(){
-            sidebarOpened.value = window.outerWidth > 768;
-        }
+      
     </script>
     
     <style scoped>

@@ -12,27 +12,27 @@ const routes = [
     {
         path: '/login',
         name: 'login',
+        component: Login,
         meta: {
             requiresGuest: true
-        },
-        component: Login,
+        }
         
     },
     {
         path: '/request-password',
         name: 'requestPassword',
+        component: RequestPassword,
         meta: {
             requiresGuest: true
-        },
-        component: RequestPassword
+        }
     },
     {
         path: '/reset-password/:token',
         name: 'resetPassword',
+        component: ResetPassword,
         meta: {
             requiresGuest: true
-        },
-        component: ResetPassword
+        }
     },
       
 
