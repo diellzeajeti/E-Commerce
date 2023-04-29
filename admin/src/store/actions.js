@@ -28,9 +28,11 @@ export function logout({commit}) {
     })
 }
 
-export function getProducts({commit}) {
+export function getProducts({commit}, {url = null}  ) {
+ 
   commit('setProducts', [true])
-  axiosClient.get('product')
+  url = url || '/products';
+  return axiosClient.get(url)
   .then(res => {
     commit('setProducts', [false, res.data])
   })
