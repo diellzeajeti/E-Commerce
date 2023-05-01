@@ -8,7 +8,7 @@
         Add new Product
       </button>
     </div>
-    <ProductModal v-nodel="showModal" :product="productModel"/>
+    <ProductModal v-model="showModal" :product="productModel"/>
     <ProductsTable/>
 </template>
    
