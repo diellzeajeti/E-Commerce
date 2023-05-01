@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class ProductController extends Controller
 {
@@ -78,9 +79,27 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $product->update($request->validated());
+        $data = $request->validated();
+        $data['updated_by'] = $request->user()->id;
+
+        /** @var \Illuminate\Http\UploadedFile $image */
+        $image = $data['image'] ?? null;
+
+        //Check if img was given and save on local file system
+        if($image) {
+            $relativePath = $this->saveImage($image);
+            $data['image'] = URL::to(Storage::url($relativePath));
+            $data['image_mime'] = $image->getClientMimeType();
+            $data['image_size'] = $image->getSize();
+
+            if($product->image) {
+                Storage::deleteDirectory('/public/' . dirname($product->image));
+            }
+        }
+
+        $product->update($data);
 
         return new ProductResource($product);
     }

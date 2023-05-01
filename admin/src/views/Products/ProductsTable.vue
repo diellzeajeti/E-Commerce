@@ -55,7 +55,7 @@
       <tr v-for="product of products.data">
         <td class="border-b p-2 ">{{ product.id }}</td>
         <td class="border-b p-2 ">
-          <img class="w-16 h-16 object-cover" :src="product.image" :alt="product.title">
+          <img class="w-16 h-16 object-cover" :src="product.image_url" :alt="product.title">
         </td>
         <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{
             product.title
@@ -71,7 +71,7 @@
           <Menu as="div" class="relative inline-block text-left">
             <div>
               <MenuButton 
-                class="inline-flex items-center justify-center w-full justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-white hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                class="inline-flex items-center justify-center w-full  rounded-full h-10 bg-black bg-opacity-0 text-sm font-medium text-white hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                 <DotsVerticalIcon
                 class="h-5 w-5 text-indigo-500"
                 aria-hidden="true"/>
@@ -96,6 +96,7 @@
                         active ? 'bg-indigo-600 text-white' : 'text-gray-900',
                         'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                       ]"
+                      @click="editProduct(product)"
                     >
                     <PencilIcon
                     :active="active"
@@ -171,7 +172,9 @@
    import TableHeaderCell from '../../components/core/Table/TableHeaderCell.vue';
    import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
    import { DotsVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline';
-  
+   
+   const emit = defineEmits(['clickEdit']);
+
    const perPage = ref(PRODUCTS_PER_PAGE)
    const search = ref('')
    const products = computed(() => store.state.products)
@@ -211,6 +214,10 @@
     sortDirection.value = 'asc'
   }
   getProducts();
+}
+
+function editProduct(product) {
+  emit('clickEdit', product)
 }
 
 function deleteProduct(product) {
