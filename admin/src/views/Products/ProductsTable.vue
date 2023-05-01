@@ -1,6 +1,5 @@
 <template>
  <div class="bg-white p-4 rounded-lg shadow">
-      {{ search }}
       <div class="flex justify-between border-b-2 pb-3">
         <div class="flex items-center">
           <span class="whitespace-nowrap mr-3">Per Page</span>
@@ -45,7 +44,7 @@
       <tbody v-if="products.loading">
       <tr>
         <td colspan="5">
-          <Spinner class="my-4" v-if="profucts.loading"/>
+          <Spinner class="my-4" v-if="products.loading"/>
         </td>
       </tr>
       </tbody>
