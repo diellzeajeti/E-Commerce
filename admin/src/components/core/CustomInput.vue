@@ -1,9 +1,9 @@
 <template>
 <div>
 <label class="sr-only">{{ label }}</label>
-<div class="mr-1 flex rounded-md shadow-sm">
+<div class="mt-1 flex rounded-md shadow-sm">
    <span v-if="prepend"
-        class="inline-flex items-center px-3 rounded-l-sm border border-r-0 border-gray-300 bg-gary-50 text-gray-500 text-sm">
+        class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
        {{ prepend }}
    </span>
    <template v-if="type === 'textarea'">
@@ -44,7 +44,7 @@
 
 </template>
 
-<script>
+<script setup>
 import {computed} from "vue";
 
 const props = defineProps({
@@ -55,21 +55,29 @@ const props = defineProps({
     default: 'text'
   },
   name: String,
-  required: Boolean
+  required: Boolean,
+  prepend: {
+        type: String,
+        default: ''
+    },
+    append: {
+        type: String,
+        default: ''
+    }
 })
 
 const inputClasses = computed( () => {
     const cls = [
-        'block w-full px-3 py-2 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:x-10 sm:text-sm ',
+    `block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`,
     ];
-    if(props.append && !props.prepend){
-        cls.push('rounded-l-md')
-    }else if(props.propend && !props.append){
-        cls.push('rounded-r-md')
-    }else if(!props.prepend && !props.append){
-        cls.push('rounded-md')
+    if(props.append && !props.prepend) {
+        cls.push(`rounded-l-md`)
+    } else if(props.prepend && !props.append){
+        cls.push(`rounded-r-md`)
+    } else if(!props.prepend && !props.append) {
+        cls.push(`rounded-md`)
     }
-    return cls.join('')
+    return cls.join(' ')
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
