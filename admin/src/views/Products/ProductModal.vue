@@ -1,163 +1,165 @@
 <template>
-    <div class="flex items-center justify-between mb-3">
-      <h1 class="text-3xl font-semibold">Products</h1>
-      <button type="submit"
-              class="flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+
+  <TransitionRoot appear :show="show" as="template">
+    <Dialog as="div" @close="closeModal" class="relative z-10">
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
       >
-        Add new Product
-      </button>
-    </div>
-    <div class="bg-white p-4 rounded-lg shadow">
-      {{ search }}
-      <div class="flex justify-between border-b-2 pb-3">
-        <div class="flex items-center">
-          <span class="whitespace-nowrap mr-3">Per Page</span>
-          <select @change="getProducts(null)" v-model="perPage"
-                  class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
-        <div>
-          <input v-model="search" @change="getProducts(null)"
-                 class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                 placeholder="Type to Search products">
+        <div class="fixed inset-0 bg-black bg-opacity-75" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
+        >
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+            >
+            <Spinner v-if="loading"
+                      class="absolute left-0 top-0 bg-white right-0 bottom-0 flex items-center justify-center"/>
+
+                      <header class="py-3 px-4 flex justify-between items-center">
+                         <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                          {{ product.id ? `Update product: "${props.product.title}"` : 'Create new Product' }}
+                        </DialogTitle>
+                        <button 
+                        @click="closeModal()"
+                        class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)] "
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                  </svg>
+                        </button>
+                      </header>
+                      <form @submit.prevent="onSubmit">
+                        <div classs="bg-white px-4 pt-5 pb-4">
+                            <CustomInput class="mb-2" v-model="product.title" label="Product Title"/>
+                            <CustomInput type="file" class="mb-2" label="Product Image" @change="file => product.image= file"/>
+                            <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description"/>
+                            <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$"/>
+
+                          </div>
+                        <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                          <button type="submit"
+                         class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
+                          bg-indigo-600 hover:bg-indigo-700  focus:ring-indigo-500 text-white">
+                         Submit
+                          </button>
+                          <button type="button"
+                          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                        @click="closeModal" ref="cancelButtonRef">
+                        Cancel
+                          </button>
+                        </footer>
+
+                      </form>
+            </DialogPanel>
+          </TransitionChild>
         </div>
       </div>
-      <table class="table-auto w-full">
-      <thead>
-      <tr>
-        <TableHeaderCell field="id" :sort-field="sortField" :sort-direction="sortDirection" @click="sortProducts('id')">
-          ID
-        </TableHeaderCell>
-        <TableHeaderCell field="image" :sort-field="sortField" :sort-direction="sortDirection">
-          Image
-        </TableHeaderCell>
-        <TableHeaderCell field="title" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortProducts('title')">
-          Title
-        </TableHeaderCell>
-        <TableHeaderCell field="price" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortProducts('price')">
-          Price
-        </TableHeaderCell>
-        <TableHeaderCell field="updated_at" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortProducts('updated_at')">
-          Last Updated At
-        </TableHeaderCell>
-      </tr>
-      </thead>
-      <tbody v-if="products.loading">
-      <tr>
-        <td colspan="5">
-          <Spinner class="my-4" v-if="profucts.loading"/>
-        </td>
-      </tr>
-      </tbody>
-      <tbody v-else>
-      <tr v-for="product of products.data">
-        <td class="border-b p-2 ">{{ product.id }}</td>
-        <td class="border-b p-2 ">
-          <img class="w-16 h-16 object-cover" :src="product.image" :alt="product.title">
-        </td>
-        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{
-            product.title
-          }}
-        </td>
-        <td class="border-b p-2">
-          {{ product.price }}
-        </td>
-        <td class="border-b p-2 ">
-          {{ product.updated_at }}
-        </td>
-      </tr>
-      </tbody>
-    </table>
-          <div v-if="!products.loading" class="flex justify-between items-center mt-5">
-             <span>
-                Showing from {{ products.from }} to {{ products.to }}
-              </span>
-              <nav
-        v-if="products.total > products.limit"
-        class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
-        aria-label="Pagination"
-      >
-        <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-        <a
-          v-for="(link, i) of products.links"
-          :key="i"
-          :disabled="!link.url"
-          href="#"
-          @click="getForPage($event, link)"
-          aria-current="page"
-          class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
-          :class="[
-              link.active
-                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-              i === 0 ? 'rounded-l-md' : '',
-              i === products.links.length - 1 ? 'rounded-r-md' : '',
-              !link.url ? ' bg-gray-100 text-gray-700': ''
-            ]"
-               v-html="link.label"
-        >
-        </a>
-      </nav>
-    </div>
-  </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
-   
-   <script setup>
-   import {computed, onMounted, ref} from 'vue';
-   import store from '../store/index.js';
-   import Spinner from '../components/core/Spinner.vue';
-   import {PRODUCTS_PER_PAGE} from "../constants.js";
-   import TableHeaderCell from '../components/core/Table/TableHeaderCell.vue';
-  
-   const perPage = ref(PRODUCTS_PER_PAGE)
-   const search = ref('')
-   const products = computed(() => store.state.products)
-   const sortField = ref('updated_at')
-   const sortDirection = ref('desc')
 
-   onMounted(() => {
-      getProducts();
-   })
-  
-   function getProducts(url = null){
-      store.dispatch('getProducts', {
-        url,
-        search: search.value,
-        per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value
-      })
-   }
-  
-   function getForPage(ev, link) {
-     if(!link.url || link.active){
-     return
-     }
-    getProducts(link.url)
-   }
+<script setup>
+import { ref, onUpdated, computed} from 'vue'
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/vue'
+import store from "../../store";
+import CustomInput from "../../components/core/CustomInput.vue";
+import Spinner from "../../components/core/Spinner.vue";
 
-   function sortProducts(field) {
-  if (field === sortField.value) {
-    if (sortDirection.value === 'desc') {
-      sortDirection.value = 'asc'
-    } else {
-      sortDirection.value = 'desc'
+
+const product = ref({
+  id: props.product.id,
+  title: props.product.title,
+  image: props.product.image,
+  description: props.product.description,
+  price: props.product.price
+})
+
+const loading = ref(false)
+
+const props = defineProps({
+    modelValue: Boolean,
+    product: {
+      required: true,
+      type: Object,
     }
-  } else {
-    sortField.value = field;
-    sortDirection.value = 'asc'
-  }
-  getProducts();
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const show = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value)
+})
+
+onUpdated(() => {
+      product.value = {
+        id: props.product.id,
+        title: props.product.title,
+        image: props.product.image,
+        description: props.product.description,
+        price: props.product.price
+      }
+})
+
+function closeModal() {
+  show.value = false
+  emit('close')
 }
-   </script>
+
+function onSubmit() {
+  loading.value = true
+  if(product.value.id){
+    store.dispatch('updateProduct', product.value)
+    .then(response => {
+      loading.value = false;
+      if(response.status === 200){
+        //TOD show notification
+        store.dispatch ('getProducts')
+        closeModal()
+      }
+    })
+  }else{
+    store.dispatch('createProduct', product.value)
+    .then(response => {
+      loading.value = false;
+      if(response.status === 201){
+        //TODO show notification
+        store.dispatch('getProducts')
+        closeModal()
+      }
+
+    })
+  }
+}
+
+</script>
+
    
    <style scoped>
+
+
    </style>
