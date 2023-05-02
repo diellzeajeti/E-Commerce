@@ -19,7 +19,7 @@ module.exports = {
         },
       },
       animation: {
-        'fade-in-down': "fade-in-down 0.2s ease-in-out both",
+        'fade-in-down': "fade-in-down 0.2s ease-in-out",
 
       },
     },
