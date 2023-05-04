@@ -15,7 +15,7 @@
    <script setup>
    import ProductsTable from "./ProductsTable.vue"
    import ProductModal from "./ProductModal.vue"
-   import {ref} from "vue";
+   import {ref, computed, onMounted} from "vue";
    import store from "../../store";
 
    const DEFAULT_EMPTY_OBJECT = {
@@ -27,7 +27,7 @@
    }
    const showModal = ref(false)
    const productModel = ref({...DEFAULT_EMPTY_OBJECT})
-
+   const products=computed(() => store.state.products);
 
    function showProductModal(){
        showModal.value = true
@@ -37,7 +37,7 @@
     store.dispatch('getProduct', product.id)
       .then(({data}) => {
         productModel.value = data
-        showProductModal()
+        showProductModal();
       })
    }
 

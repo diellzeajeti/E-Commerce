@@ -6,6 +6,15 @@
         class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
        {{ prepend }}
    </span>
+   <template v-if="type === 'select'">
+    <select :name="name"
+              :required="required"
+              :value="props.modelValue"
+              :class="inputClasses"
+              @change="onChange($event.target.value)">
+               <option v-for="option of selectOptions" :value="option.key">{{option.text}}</option>
+            </select>
+   </template>
    <template v-if="type === 'textarea'">
     <textarea :name="name"
               :required="required"
@@ -24,6 +33,16 @@
            :placeholder="label"/>
 
    </template>
+   <template v-else-if="type === 'checkbox'">
+    <input :id="id"
+           :name="name"
+           :type="type"
+           :checked="props.modelValue"
+           :required="required"
+           @change="emit('update:modelValue', $event.target.checked)"
+           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"/>
+    <label :for="id" class="ml-2 block text-sm text-gray-900"> {{ label }} </label>
+  </template>
    <template v-else>
     <input :type="type"
             :name="name"
@@ -45,7 +64,7 @@
 </template>
 
 <script setup>
-import {computed} from "vue";
+import {computed, ref} from "vue";
 
 const props = defineProps({
   modelValue: [String, Number, File],
@@ -81,6 +100,11 @@ const inputClasses = computed( () => {
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
+
+function onChange (value){
+    emit('update:modelValue', value)
+    emit('change', value)
+}
 </script>
 
 <style scoped>

@@ -28,16 +28,17 @@ export function logout({commit}) {
     })
 }
 
-export function getProducts({commit}, {url = null, search ='', perPage = 10, sort_field, sort_direction} = {}) {
+export function getProducts({commit,state}, {url = null, search ='',per_page, sort_field, sort_direction} = {}) {
  
   commit('setProducts', [true])
   url = url || '/products';
+  const params={
+    per_page:state.products.limit
+  }
   return axiosClient.get(url, {
     params: {
-      search,
-      per_page: perPage,
-      sort_field,
-      sort_direction
+      ...params,
+      search, per_page, sort_field, sort_direction
 
     }
   })
@@ -50,7 +51,7 @@ export function getProducts({commit}, {url = null, search ='', perPage = 10, sor
   })
 }
 
-export function getProduct({}, id) {
+export function getProduct({commit}, id) {
   return axiosClient.get(`/products/${id}`);
 }
 

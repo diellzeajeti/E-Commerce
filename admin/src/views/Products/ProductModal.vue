@@ -1,7 +1,7 @@
 <template>
 
-  <TransitionRoot appear :show="show" as="template">
-    <Dialog as="div" @close="closeModal" class="relative z-10">
+  <TransitionRoot :show="show" as="template">
+    <Dialog as="div" @close="show=false" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
