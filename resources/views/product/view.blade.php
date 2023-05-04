@@ -88,8 +88,7 @@
             <h1 class="text-lg font-semibold">
             {{$product->title}}
             </h1>
-            <div class="text-xl font-bold mb-6">{{$product->price}}</div>
-            <div class="flex items-center mb-6">
+            <div class="text-xl font-bold mb-6">${{$product->price}}</div>
             <div class="flex items-center justify-between mb-5">
               <label for="quantity" class="block font-bold mr-4">
                 Quantity
@@ -128,35 +127,6 @@
                 x-collapse.min.120px
                 class="text-gray-500 wysiwyg-content" >
                 {{$product->description}}
-                  <li>
-                    Hero 25K sensor through a software update from G HUB, this
-                    upgrade is free to all players: Our most advanced, with 1:1
-                    tracking, 400-plus ips, and 100 - 25,600 max dpi sensitivity
-                    plus zero smoothing, filtering, or acceleration
-                  </li>
-                  <li>
-                    11 customizable buttons and onboard memory: Assign custom
-                    commands to the buttons and save up to five ready to play
-                    profiles directly to the mouse
-                  </li>
-                  <li>
-                    Adjustable weight system: Arrange up to five removable 3.6
-                    grams weights inside the mouse for personalized weight and
-                    balance tuning
-                  </li>
-                  <li>
-                    Programmable RGB Lighting and Lightsync technology:
-                    Customize lighting from nearly 16.8 million colors to match
-                    your team's colors, sport your own or sync colors with other
-                    Logitech G gear
-                  </li>
-                  <li>
-                    Mechanical switch button tensioning: Metal spring tensioning
-                    system and pivot hinges are built into left and right gaming
-                    mouse buttons for a crisp, clean click feel with rapid click
-                    feedback
-                  </li>
-                </ul>
               </div>
               <p class="text-right">
                 <a

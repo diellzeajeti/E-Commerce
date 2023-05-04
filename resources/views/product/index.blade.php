@@ -1,19 +1,19 @@
 <x-app-layout>
      <!-- Product List -->
      <div
-        class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5"
+        class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5"
       >
       @foreach($products as $product)
         <!-- Product Item -->
         <div
-          x-data="productItem({
-            id: 1, 
-            image: 'img/1_1.jpg', 
-            title: 'Logitech G502 HERO High Performance Wired Gaming Mouse, HERO 25K Sensor, 25,600 DPI, RGB, Adjustable Weights, 11',
-            price: 17.99
-          })"
-          class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white"
-        >
+                x-data="productItem({{ json_encode([
+                    'id' => $product->id,
+                    'image' => $product->image,
+                    'title' => $product->title,
+                    'price' => $product->price,
+                ]) }})"
+                class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white"
+            >
           <a href="{{ route('product.view', $product->slug)}}" class="block overflow-hidden aspect-w-3 aspect-h-2">
             <img
               src="{{ $product->image }}"
