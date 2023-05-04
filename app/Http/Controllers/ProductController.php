@@ -14,4 +14,10 @@ class ProductController extends Controller
             'products' => $products
         ]);
     }
+
+    public function view(Product $product)
+{
+       Return view('product.view', ['product' => $product]);
+}
+
 }
