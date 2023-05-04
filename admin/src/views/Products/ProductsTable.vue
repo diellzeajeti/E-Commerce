@@ -172,7 +172,8 @@
    import TableHeaderCell from '../../components/core/Table/TableHeaderCell.vue';
    import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
    import { DotsVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline';
-   
+   import ProductModal from './ProductModal.vue';
+
    const emit = defineEmits(['clickEdit']);
 
    const perPage = ref(PRODUCTS_PER_PAGE)
@@ -180,6 +181,9 @@
    const products = computed(() => store.state.products)
    const sortField = ref('updated_at')
    const sortDirection = ref('desc')
+
+   const product = ref({})
+   const showProductModal = ref(false);
 
    onMounted(() => {
       getProducts();
@@ -196,6 +200,7 @@
    }
   
    function getForPage(ev, link) {
+    ev.preventDefault();
      if(!link.url || link.active){
      return
      }

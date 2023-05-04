@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Http\Requests\ProductRequest;
+use Illuminate\Http\Request;
 use App\Http\Resources\ProductListResource;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
@@ -21,25 +22,23 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $search = request('search', false);
+        $search = request('search','');
         $perPage = request('per_page', 10);
-        $sortField = request('sort_field', 'updated_at');
+        $sortField = request('sort_field', 'created_at');
         $sortDirection = request('sort_direction', 'desc');
 
 
-        $query = Product :: query();
-        $query -> orderBy($sortField, $sortDirection);
-        if ($search) {
-            $query -> where ('title', 'like', "%{$search}%")
-            ->orWhere('description', 'like', "%{$search}%");
-        }
-        return ProductListResource :: collection($query->paginate($perPage));
+        $query = Product::query()
+        ->where('title', 'like', "%{$search}%")
+        ->orderBy ($sortField, $sortDirection)
+        ->paginate ($perPage);
+        return ProductListResource::collection($query);
     }
 
     /**
      * Store a newly created resource in storage.
      * 
-     * @param  \Illuminate\Http\Requests\ProductRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(ProductRequest $request)
@@ -76,7 +75,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      * 
-     * @param \App\Http\Requests\ProductRequest $request
+     * @param \App\Http\Request $request
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
@@ -117,7 +116,7 @@ class ProductController extends Controller
 
         return response()->noContent();
     }
-    private function saveImage(\Illuminate\Http\UploadedFile $image)
+    private function saveImage(UploadedFile $image)
     {
         $path = 'images/' . Str::random();
         if(!Storage::exists($path)){
