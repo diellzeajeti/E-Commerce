@@ -18,9 +18,7 @@ Route::get('/', [\App\Http\Controllers\ProductController::class, 'index'])->name
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 
 
