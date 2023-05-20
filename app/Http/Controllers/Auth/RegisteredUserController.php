@@ -46,6 +46,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        Cart::moveCartItemsIntoDb();
+
         return redirect(RouteServiceProvider::HOME);
     }
 }
