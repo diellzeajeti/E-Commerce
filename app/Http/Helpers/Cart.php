@@ -4,6 +4,7 @@
 namespace App\Http\Helpers;
 
 use App\Models\CartItem;
+use Illuminate\Support\Arr;
 
 
 /**
@@ -22,15 +23,15 @@ class Cart{
         $request = \request();
         $user =$request->user();
         if($user) {
-            return CartItem::where('user-id', $user->id)->sum('quantity');   
+            return CartItem::where('user_id', $user->id)->sum('quantity');   
         } else {
             $cartItems = self::getCookieCartItems();
 
-            return array_reduce{
+            return array_reduce(
                 $cartItems,
                 fn($carry, $item) => $carry + $item['quantity'],
                 initial: 0
-            };
+            );
         }
     }
 
@@ -39,9 +40,10 @@ class Cart{
         $request =\request();
         $user = $request->user();
         if($user) {
-            return CartItem::where('user_id', $user->id)->get()->map{
-                fn($item) => ['product_id' => $item->product_id,  'quantity' => $item->quantity]
-            };
+            return Arr::map(
+                CartItem::where('user_id', $user->id)->get(),
+                fn($item) => ['product_id' => $item->product_id, 'quantity' => $item->quantity]
+            );
         }else{
             return self::getCookieCartItems();
         }
@@ -53,16 +55,16 @@ class Cart{
     
         $request = \request();
 
-        return json-decode($request->cookie('cart-items', '[]'), true);
+        return json_decode($request->cookie('cart_items', '[]'), true);
     }
 
     public static function getCountFromItems($cartItems)
     {
-    return array_reduce{
-        $cartItems,
-        fn($carry, $item) => $carry + $item['quantity'],
-        initial:0
-    };
+        return array_reduce(
+            $cartItems,
+            fn($carry, $item) => $carry + $item['quantity'],
+            initial:0
+        );
     }
 
     public static function moveCartItemsIntoDb()

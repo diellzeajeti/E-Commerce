@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Cart;
+use App\Http\Helpers\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -52,7 +52,7 @@ class CartController extends Controller
         }else {
             $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
             $productFound = false;
-            foreach ($cartItem as &$item) {
+            foreach ($cartItems as &$item) {
                 if($item['product_id'] === $product->id) {
                     $item['quantity'] += $quantity;
                     $productFound = true;
