@@ -32,6 +32,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/profile', [ProfileController::class, 'view'])->name('profile');
+    Route::post('/profile', [ProfileController::class, 'store'])->name('profile.update');
+
 });
 
 
