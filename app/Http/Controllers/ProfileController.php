@@ -3,30 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AddressType;
-use App\Http\Requests\PasswordUpdateRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Country;
 use App\Models\CustomerAddress;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 
 class ProfileController extends Controller
 {
-   public function view(Request $request){
-
-      /** @var \App\Models\User $user */
-      $user = $request->user();
-      /** @var \App\Models\Customer $customer */
-       $customer = $user->customer;
-       $shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
-       $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
-     //  dd($customer, $shippingAddress->attributesToArray(), $billingAddress, $billingAddress->customer);
-       $countries = Country::query()->orderBy('name')->get();
-
-            
-       return view('profile.view', compact('customer','user','shippingAddress','billingAddress','countries'));
-   }
+    public function view(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+        /** @var \App\Models\Customer $customer */
+        $customer = $user->customer;
+        $shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
+        $billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
+//        dd($customer, $shippingAddress->attributesToArray(), $billingAddress, $billingAddress->customer);
+        $countries = Country::query()->orderBy('name')->get();
+        return view('profile.view', compact('customer', 'user', 'shippingAddress', 'billingAddress', 'countries'));
+    }
 
    public function store(ProfileRequest $request)
 	{
@@ -36,28 +31,19 @@ class ProfileController extends Controller
 
 	/** @var \App\Models\User $user */
 	$user = $request->user();
+    /** @var \App\Models\Customer $customer */
+    $customer = $user->customer;
 	$shippingAddress = $customer->shippingAddress ?: new CustomerAddress(['type' => AddressType::Shipping]);
 	$billingAddress = $customer->billingAddress ?: new CustomerAddress(['type' => AddressType::Billing]);
 
 	$customer->update($customerData);
 	
-	if($customer->shippingAddress){
-		$customer->shippingAddress->update($shippingData);
-	}else {
-		$shippingData['customer_id'] = $customer->user_id;
-		$shippingData['type'] = AddressType::Shipping->value;
-	     	CustomerAddress::create($shippingData);
-	}
-	if($customer->billingAddress){
-		$customer->billingAddress->update($billsingData);
-	}else {
-		$billingData['customer_id'] = $customer->user_id;
-		$billingData['type'] = AddressType::Billing->value;
-	     	CustomerAddress::create($billingData);
-	}
+    $shippingAddress->update($shippingData);
+    $billingAddress->update($billingData);
 
-	$request->session()->flash('flash_message', 'Profile was successfully updated.');
+    $request->session()->flash('flash_message', 'Profile was successfully updated.');
 
-	return redirect()->route('profile');
-	}
+    return redirect()->route('profile');
+
+    }
 }
