@@ -13,11 +13,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = Cart::getCartItems();
-
-        $ids = Arr::pluck($cartItems, 'product_id');
-        $products = Product::query()->whereIn('id', $ids)->get();
-        $cartItems = Arr::keyBy($cartItems, 'product_id');
+        list($products, $cartItems) = $this->getProductsAndCartItems();
         $total = 0;
         foreach ($products as $product) {
             $total += $product->price * $cartItems[$product->id]['quantity'];
@@ -128,6 +124,49 @@ class CartController extends Controller
 
             return response(['count' => Cart::getCountFromItems($cartItems)]);
         }
-    } 
+    }
+   public function checkout(Request $request)
+   {
+    \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+   
+    list($products, $cartItems) = $this->getProductsAndCartItems()
+    
+
+    $lineItems = [];
+    foreach ($products as $product){
+        $lineItems[] = [
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => $product->title,
+                ],
+                'unit_amount' => $product->price,
+                ],
+                'quantity' => 1,
+            ];
+    }
+
+    $session =\Stripe\Checkout\Session::create([
+        'line_items' => $lineItems,
+        'mode' => 'payment',
+        'success_url' => 'https://example.com/sucess',
+        'cancel_url' => 'https://example.com/cancel',
+        ]);
+   }
+    
+
+   /**
+    * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+    */
+
+    public function checkout(Request $request)
+    {
+        $cartItems = Cart::getCartItems();
+        $ids = Arr::pluck($cartItems, 'product_id');
+        $products = Product::query()->whereIn('id', $ids)->get();
+        $cartItems = Arr::keyBy($cartItems, 'product_id');
+    
+        return [$products, $cartItems];
+    }
 }
 
