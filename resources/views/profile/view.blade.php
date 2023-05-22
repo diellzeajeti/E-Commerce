@@ -9,6 +9,11 @@
         }" class="container mx-auto lg:w-2/3 p-5">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             <div class="bg-white p-3 shadow rounded-lg md:col-span-2">
+
+           
+                       
+               
+            
                 <form x-data="{
                     countries: {{ json_encode($countries) }},
                     billingAddress: {{ json_encode([
@@ -248,7 +253,43 @@
 
                     <x-button class="w-full">Update</x-button>
                 </form>
-            </div>
+           
+              </div>
+      <div class="bg-white p-3 shadow rounded-lg">
+           <form action="{{route('profile_password.update')}}" method="post">
+                @csrf
+                <h2 class="text-xl font-semibold mb-2">Update Password</h2>
+                <div class="mb-3">
+                     <x-input
+                        type="password"
+                        name="old_password"
+                        placeholder="Your Current Password"
+                        class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
+                        />
+                        </div>
+                        <div class="mb-3">
+                             <x-input
+                                type="password"
+                                name="new_password"
+                                placeholder="New Password"
+                                class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
+                        />
+                        </div>
+                        <div class="mb-3">    
+                        <x-input
+                                type="password"
+                                name="new_password_confirmation"
+                                placeholder="Repeat New Password"
+                                class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded" 
+                        />
+                        </div>           
+            <x-button>Update
+            </x-button>
+
+            </form>
+           
+       
+       
         </div>
     </div>
 </x-app-layout>
