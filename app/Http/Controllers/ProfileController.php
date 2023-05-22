@@ -60,4 +60,20 @@ class ProfileController extends Controller
 
 	return redirect()->route('profile');
 	}
+
+	public function passwordUpdate(PasswordUpdateRequest $request)
+	{
+        /** @vare \App\Models\User $user */
+		$user = $request->user();
+
+		$passwordData = $request->validated();
+
+		$user->password = Hash::make($passwordData['new_password']);
+		$user->save();
+
+		$request->session()->flash('flash_message', 'Your password was successfully updated.');
+
+		return redirect()->route('profile');
+	
+	}
 }
