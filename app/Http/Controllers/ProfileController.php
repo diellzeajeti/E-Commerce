@@ -63,7 +63,7 @@ $customer->update($customerData);
 
 	public function passwordUpdate(PasswordUpdateRequest $request)
 	{
-        /** @vare \App\Models\User $user */
+        /** @var \App\Models\User $user */
 		$user = $request->user();
 
 		$passwordData = $request->validated();
