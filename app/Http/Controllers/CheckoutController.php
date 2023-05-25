@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Enums\PaymentStatus;
 use App\Models\CartItem;
+use App\Models\OrderItem;
 
 class CheckoutController extends Controller
 {
@@ -25,7 +26,7 @@ class CheckoutController extends Controller
 
         list($products, $cartItems) = Cart::getProductsAndCartItems();
         
-        
+        $orderItems = [];
         $lineItems = [];
         $totalPrice = 0;
         foreach($products as $product){
@@ -36,11 +37,16 @@ class CheckoutController extends Controller
                     'currency' => 'usd',
                     'product_data' => [
                       'name' => $product->title,
-                      'images' => [$product->image]
+                     // 'images' => [$product->image]
                     ],
                     'unit_amount' => $product->price * 100,
                   ],
                   'quantity' => $quantity,
+            ];
+            $orderItems[] = [
+                'product_id' => $product->id,
+                'quantity' => $quantity,
+                'unit_price'=> $product->price
             ];
         }
 
@@ -53,7 +59,7 @@ class CheckoutController extends Controller
             'customer_creation'=>'always',
           ]);
           
-            
+            // Create Order
 
           $orderData =[
               'total_price' => $totalPrice,
@@ -61,8 +67,18 @@ class CheckoutController extends Controller
               'created_by' => $user->id,
               'updated_by' => $user->id,
           ];
+
            $order = Order::create($orderData);
-          
+
+            // Create Order Items
+
+            foreach ($orderItems as $orderItem){
+                $orderItem['order_id'] = $order->id;
+                OrderItem::create($orderItem);
+
+            }
+
+            //Create Payment
 
            $paymentData = [
              'order_id' => $order->id,
@@ -71,7 +87,7 @@ class CheckoutController extends Controller
              'type' => $user->id,
              'created_by' => $user->id,
              'updated_by' => $user->id,
-              'session_id' => $session->id
+             'session_id' => $session->id
            ];
 
           Payment::create($paymentData);
@@ -123,6 +139,41 @@ class CheckoutController extends Controller
     public function failure(Request $request)
     {
         
-        dd($request->all());
+        return view('checkout.failure', ['message' => ""]);
+    }
+
+    public function checkoutOrder(Order $order, Request $request)
+    {
+             /** @var \App\Models\User $user */
+		     $user = $request->user();
+             $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
+
+             $lineItems = [];
+             foreach ($order->items as $item){
+                $lineItems[] = [
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                          'name' =>$item->product->title,
+                         // 'images' => [$product->image]
+                        ],
+                        'unit_amount' => $item->unit_price * 100,
+                      ],
+                      'quantity' => $item->quantity,
+
+                    ];
+
+           }
+
+             $session = $stripe->checkout->sessions->create([
+                'line_items' => $lineItems,
+                'mode' => 'payment',
+                'success_url' => route('checkout.success', [], true) . "?session_id={CHECKOUT_SESSION_ID}",
+                'cancel_url' => route('checkout.failure', [], true),
+                'customer_creation'=>'always',
+              ]);
+            $order->payment->session_id = $session->id;
+        $order->payment->save();
+              return redirect($session->url);
     }
 }
