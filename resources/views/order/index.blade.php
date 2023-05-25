@@ -58,7 +58,7 @@
                                 View Invoice
                             </a>
                             @if (!$order->isPaid())
-                                <form action=""
+                                <form action="{{ route('cart.checkout-order', $order) }}"
                                       method="POST">
                                     @csrf
                                     <button
