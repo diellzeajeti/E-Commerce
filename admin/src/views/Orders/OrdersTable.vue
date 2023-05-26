@@ -25,117 +25,72 @@
         <TableHeaderCell field="id" :sort-field="sortField" :sort-direction="sortDirection" @click="sortOrders('id')">
           ID
         </TableHeaderCell>
+        
+        <TableHeaderCell field="customer" :sort-field="sortField" :sort-direction="sortDirection">
+          Customer
+        </TableHeaderCell>
         <TableHeaderCell field="status" :sort-field="sortField" :sort-direction="sortDirection"  
                          @click="sortOrders('created_at')">
           Status
         </TableHeaderCell>
-        <TableHeaderCell field="creaed_at" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortOrders('created_at')">
-          Date
-        </TableHeaderCell>
+        
         <TableHeaderCell field="total_price" :sort-field="sortField" :sort-direction="sortDirection"
                          @click="sortOrders('total_price')">
           Price
         </TableHeaderCell>
-        <TableHeaderCell field="number_of_items" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortOrders('number_of_items')">
-          Items
+        <TableHeaderCell field="created_at" :sort-field="sortField" :sort-direction="sortDirection"
+                         @click="sortOrders('created_at')">
+          Date
         </TableHeaderCell>
         <TableHeaderCell field="actions">
           Actions
         </TableHeaderCell>
       </tr>
       </thead>
-      <tbody v-if="orders.loading">
-      <tr>
-        <td colspan="6">
-          <Spinner class="my-4" v-if="orders.loading"/>
-        </td>
-      </tr>
-      </tbody>
-      <tbody v-else>
-      <tr v-for="(order, index) of orders.data" class="animate-fade-in-down" stle="{'animation-delay': `${index * 0.05}s`}">
-        <td class="border-b p-2 ">{{ order.id }}</td>
-        <td class="border-b p-2 ">
-          <span>{{ order.status }}</span>
-        </td>
-        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{
-            order.created_at
-          }}
-        </td>
-        <td class="border-b p-2">
-          ${{ order.total_price }}
-        </td>
-        <td class="border-b p-2 ">
-          {{ order.number_of_items }}
-        </td>
-        <td class="border-b p-2">
-          <Menu as="div" class="relative inline-block text-left">
-            <div>
-              <MenuButton 
-                class="inline-flex items-center justify-center w-full  rounded-full h-10 bg-black bg-opacity-0 text-sm font-medium text-white hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                <DotsVerticalIcon
-                class="h-5 w-5 text-indigo-500"
-                aria-hidden="true"/>
-              </MenuButton>
-            </div>
-
-            <transition
-              enter-active-class="transition duration-100 ease-out"
-              enter-from-class="transform scale-95 opacity-0"
-              enter-to-class="transform scale-100 opacity-100"
-              leave-active-class="transition duration-75 ease-in"
-              leave-from-class="transform scale-100 opacity-100"
-              leave-to-class="transform scale-95 opacity-0"
-            >
-            <MenuItems
-            class="absolute z-10 right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
-            <div class="px-1 py-1">
-              <MenuItem v-slot="{ active }">
-                <button
-                      :class="[
-                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                        'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                      ]"
-                      @click="showOrder(orders)"
-                    >
-                    <PencilIcon
-                    :active="active"
-                    class="mr-2 h-5 w-5 text-indigo-400"
-                    aria-hidden="true"
-                  />
-                  Edit
-                </button>
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <button
-                  :class="[
-                    active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                  ]"
-                  @click="deleteOrder(order)"
-                >
-                  <TrashIcon
-                    :active="active"
-                    class="mr-2 h-5 w-5 text-indigo-400"
-                    aria-hidden="true"
-                  />
-                  Delete
-                </button>
-              </MenuItem>
-            </div>
-            </MenuItems>
-            </transition>
-          </Menu>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+      <tbody v-if="orders.loading || !orders.data.length">
+        <tr>
+          <td colspan="6">
+            <Spinner v-if="orders.loading"/>
+            <p v-else class="text-center py-8 text-gray-700">
+              There are no orders
+            </p>
+          </td>
+        </tr>
+        </tbody>
+        <tbody v-else>
+        <tr v-for="(order, index) of orders.data">
+          <td class="border-b p-2 ">{{ order.id }}</td>
+          <td class="border-b p-2 ">
+            {{ order.customer.first_name }} {{ order.customer.last_name }}
+          </td>
+          <td class="border-b p-2 ">
+            <span>{{ order.status }}</span>
+          </td>
+          <td class="border-b p-2">
+            ${{ order.total_price }}
+          </td>
+          <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+            {{ order.created_at }}
+          </td>
+          <td class="border-b p-2 ">
+            <router-link :to="{name: 'app.orders.view', params: {id: order.id}}"
+            class="w-8 h-8 rounded-full text-indigo-700 border border-indigo-700 flex justify-center items-center
+             hover:text-white hover:bg-indigo-700">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            </router-link>
+          </td>
+        </tr>
+        </tbody>
+      </table>
           <div v-if="!orders.loading" class="flex justify-between items-center mt-5">
-             <span>
+            <div v-if="orders.data.length">
                 Showing from {{ orders.from }} to {{ orders.to }}
-              </span>
+            </div>
               <nav
         v-if="orders.total > orders.limit"
         class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
@@ -176,7 +131,7 @@
    import { DotsVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline';
    
 
-   const emit = defineEmits(['clickEdit']);
+   const emit = defineEmits(['clickEdit'])
 
    const perPage = ref(PRODUCTS_PER_PAGE)
    const search = ref('')
@@ -223,8 +178,8 @@
   getOrders();
 }
 
-function showOrder(p) {
-  emit('clickShow', p)
+function showAddNewModal(){
+  showOrderModal.value = true
 }
 
 function deleteOrder(order) {
@@ -235,6 +190,10 @@ function deleteOrder(order) {
     .then(res => {
       store.dispatch('getOrders')
     })
+}
+
+function showOrder(p) {
+  emit('clickShow', p)
 }
    </script>
    
