@@ -104,8 +104,8 @@ class CheckoutController extends Controller
              /** @var \App\Models\User $user */
 		     $user = $request->user();
 
-           
-            $session = $stripe->checkout->sessions->retrieve($_GET['session_id']);
+            $session_id = $request->get('session_id');
+            $session = $stripe->checkout->sessions->retrieve($session_id);
             
             
             if(!$session){
@@ -114,13 +114,13 @@ class CheckoutController extends Controller
            
            $payment = Payment::query()
            ->where(['session_id' => $session_id])
-           whereIn( 'status', [PaymentStatus::Pending, PaymentStatus::Paid])
+           ->whereIn( 'status', [PaymentStatus::Pending, PaymentStatus::Paid])
            ->first();
            if (!$payment) {
-            throw new NotFoundedHttpException();
+            throw new NotFoundHttpException();
            }
 
-           if($payment->status === PaymentStatus::Pending) {
+           if($payment->status === PaymentStatus::Pending->value) {
             $this->updateOrderAndSession($payment);
             
            }
@@ -129,8 +129,10 @@ class CheckoutController extends Controller
            $customer = $stripe->customers->retrieve($session->customer);
 
             return view('checkout.success', compact('customer'));
-        } catch(Exception $e){
+        } catch(NotFoundedHttpException $e){
             throw $e;
+        } catch(\Exception $e)  {
+            
             return view('checkout.failure', ['message' => $e->getMessage()]);
         }
     }
@@ -199,7 +201,6 @@ class CheckoutController extends Controller
 } catch(\Stripe\Exception\SignatureVerificationException $e) {
   // Invalid signature
   return response('', 402);
-  exit();
 }
 
 // Handle the event
