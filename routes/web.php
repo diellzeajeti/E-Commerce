@@ -19,8 +19,8 @@ use App\Http\Controllers\OrderController;
 */
 
     Route::middleware(['guestOrVerified'])->group(function() {
-    Route::get('/', [ProductController::class, 'index'])->name('home');
-    Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
+     Route::get('/', [ProductController::class, 'index'])->name('home');
+     Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
     
     Route::prefix('/cart')->name('cart.')->group(function(){
         Route::get('/', [CartController::class, 'index'])->name('index');
@@ -42,7 +42,11 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/checkout/failure', [CheckoutController::class, 'failure'])->name('checkout.failure');
     Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
     Route::get('/orders/{order}', [OrderController::class, 'view'])->name('order.view');
+  
+
 });
+
+    Route::post('/webhook/stripe', [CheckoutController::class, 'webhook']);
 
 
 
