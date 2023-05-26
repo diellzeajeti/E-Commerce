@@ -8,19 +8,12 @@
 
 <script setup>
  import OrdersTable from "./OrdersTable.vue";
-   
-   import {ref, computed, onMounted} from "vue";
-   import store from "../../store";
+ import {ref, computed, onMounted} from "vue";
+ import store from "../../store";
 
-   
-
-   const showModal = ref(false)
-   
    const orders=computed(() => store.state.orders);
 
-   
-
-   function showOrder(product) {
+   function showOrder(p) {
    
    }
 
