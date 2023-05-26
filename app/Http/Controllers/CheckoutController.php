@@ -116,13 +116,16 @@ class CheckoutController extends Controller
            ->where(['session_id' => $session_id])
            ->whereIn( 'status', [PaymentStatus::Pending, PaymentStatus::Paid])
            ->first();
+
+        
+           
            if (!$payment) {
             throw new NotFoundHttpException();
            }
 
            if($payment->status === PaymentStatus::Pending->value) {
             $this->updateOrderAndSession($payment);
-            
+              
            }
 
            
