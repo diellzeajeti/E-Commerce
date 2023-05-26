@@ -22,7 +22,7 @@ use App\Http\Controllers\OrderController;
      Route::get('/', [ProductController::class, 'index'])->name('home');
      Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
     
-    Route::prefix('/cart')->name('cart.')->group(function(){
+        Route::prefix('/cart')->name('cart.')->group(function(){
         Route::get('/', [CartController::class, 'index'])->name('index');
         Route::post('/add/{product:slug}', [CartController::class, 'add'])->name('add');
         Route::post('/remove/{product:slug}', [CartController::class, 'remove'])->name('remove');
