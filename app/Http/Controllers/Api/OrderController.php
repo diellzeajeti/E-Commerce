@@ -21,7 +21,7 @@ class OrderController extends Controller
        $perPage = request('per_page', 10);
        $search = request('search', '');
        $sortField = request('sort_field', 'updated_at');
-    $sortDirection = request('sort_direction', 'desc');
+       $sortDirection = request('sort_direction', 'desc');
 
        $query = Order::query()
            ->where('id', 'like', "%{$search}%")
@@ -30,6 +30,11 @@ class OrderController extends Controller
 
        return OrderListResource::collection($query);
    }
+
+   public function view(Order $order)
+   {
+     return new OrderResource($order);
+   }   
 
    
 }
