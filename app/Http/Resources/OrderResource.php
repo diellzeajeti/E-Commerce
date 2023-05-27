@@ -20,7 +20,7 @@ class OrderResource extends JsonResource
     public function toArray($request)
     {
         $customer = $this->user->customer;
-        $shipping = $this->user->cutomer->shippingAddress;
+        $shipping = $this->user->customer->shippingAddress;
         $billing = $this->user->customer->billingAddress;
 
         return [
@@ -43,25 +43,25 @@ class OrderResource extends JsonResource
                     'email' => $this->user->email,
                     'first_name'=> $this->user->customer->first_name,
                     'last_name' =>$this->user->customer->lastt_name,
-                    'phone' => customer->phone,
+                    'phone' => $customer->phone,
 
                     'shippingAddress' => [
-                        'id' => shipping->id,
-                        'address1' => shipping->address1,
-                        'address2' => shipping->address2,
-                        'city' => shipping->city,
-                        'state' => shipping->state,
-                        'zipcode' => shipping->zipcode,
-                        'country' => shipping->country->name,
+                        'id' => $shipping->id,
+                        'address1' => $shipping->address1,
+                        'address2' => $shipping->address2,
+                        'city' => $shipping->city,
+                        'state' => $shipping->state,
+                        'zipcode' => $shipping->zipcode,
+                        'country' => $shipping->country->name,
                     ],
                     'billingAddress' =>[
-                        'id' => billing->id,
-                        'address1' => billing->address1,
-                        'address2' => billing->address2,
-                        'city' => billing->city,
-                        'state' => billing->state,
-                        'zipcode' => billing->zipcode,
-                        'country' => billing->country->name,
+                        'id' => $billing->id,
+                        'address1' => $billing->address1,
+                        'address2' => $billing->address2,
+                        'city' => $billing->city,
+                        'state' => $billing->state,
+                        'zipcode' => $billing->zipcode,
+                        'country' => $billing->country->name,
                     ],
             
            ],
