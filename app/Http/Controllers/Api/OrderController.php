@@ -44,6 +44,9 @@ class OrderController extends Controller
    public function changeStatus(Order $order, $status){
         $order->status = $status;
         $order->save();
+
+        Mail::to($order->user)->send(new OrderUpdateEmail($order));
+
         return response('', 200);
    }
    
