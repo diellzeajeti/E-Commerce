@@ -64,7 +64,7 @@
             {{ order.customer.first_name }} {{ order.customer.last_name }}
           </td>
           <td class="border-b p-2 ">
-            <span>{{ order.status }}</span>
+              <OrderStatus :order="order"/>
           </td>
           <td class="border-b p-2">
             ${{ order.total_price }}
@@ -129,7 +129,7 @@
    import TableHeaderCell from '../../components/core/Table/TableHeaderCell.vue';
    import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
    import { DotsVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline';
-   
+   import OrderStatus from './OrderStatus.vue';
 
    const emit = defineEmits(['clickEdit'])
 
