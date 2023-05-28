@@ -14,6 +14,9 @@ use App\Models\Payment;
 use App\Enums\PaymentStatus;
 use App\Models\CartItem;
 use App\Models\OrderItem;
+use App\Mail\NewOrderEmail;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -233,17 +236,21 @@ switch ($event->type) {
   private function updateOrderAndSession(Payment $payment)
   {
     
-            $payment->status = PaymentStatus::Paid;
+            $payment->status = PaymentStatus::Paid->value;
             $payment->update();
 
             $order = $payment->order;
             
 
-            $order->status = OrderStatus::Paid;
+            $order->status = OrderStatus::Paid->value;
             $order->update();
             $adminUsers = User::where('is_admin', 1)->get();
+            
 
-            Mail::to($adminUsers)->send(new NewOrderEmail($order));
+            foreach ([...$adminUsers, $order->user] as $user) {
+              Mail::to($user)->send(new NewOrderEmail($order, (bool)$user->is_admin));
+            }
+           
     }
 
 }
