@@ -187,7 +187,7 @@ class CheckoutController extends Controller
         
         $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
 
-        $endpoint_secret = 'whsec_6de6916c6587d69e8e84fd6bfe9ca64e25d12bf5c750b149f090228b262c33c6'; 
+        $endpoint_secret = env('WEBHOOK_SECRET_KEY'); 
 
        $payload = @file_get_contents('php://input');
        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
@@ -239,10 +239,11 @@ switch ($event->type) {
             $order = $payment->order;
             
 
-
             $order->status = OrderStatus::Paid;
             $order->update();
-  }
+            $adminUsers = User::where('is_admin', 1)->get();
 
+            Mail::to($adminUsers)->send(new NewOrderEmail($order));
+    }
 
 }
