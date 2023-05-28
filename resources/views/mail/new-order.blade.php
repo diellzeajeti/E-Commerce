@@ -32,7 +32,7 @@
           <th>Price</th>
           <th>Quantity</th>
       </tr>
-      @foreach ($order->item as $item)
+      @foreach ($order->items as $item)
         <tr>
         <td>
         <img src="{{$item->product->image}}" style="width: 100px">
