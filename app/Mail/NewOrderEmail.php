@@ -17,7 +17,7 @@ class NewOrderEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(public Order $order)
+    public function __construct(public Order $order, public $forAdmin = true)
     {
 
     }

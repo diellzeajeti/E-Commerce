@@ -10,6 +10,8 @@ use App\Http\Resources\ProductListResource;
 use App\Models\Api\Product;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Mail\OrderUpdateEmail;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 { /**
