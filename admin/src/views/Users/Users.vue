@@ -33,13 +33,11 @@
        showModal.value = true
    }
 
-   function editUser(user) {
-    store.dispatch('getUser', user.id)
-      .then(({data}) => {
-        userModel.value = data
+   function editUser(u) {
+        userModel.value = u;
         showUserModal();
-      })
-   }
+      }
+  
 
   function onModalClose(){
     userModel.value = {...DEFAULT_EMPTY_OBJECT}

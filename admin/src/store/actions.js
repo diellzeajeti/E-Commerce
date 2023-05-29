@@ -120,6 +120,9 @@ export function createProduct({commit}, product) {
   }
   return axiosClient.post('/products', product)
 }
+export function createUser({commit}, user) {
+  return axiosClient.post(`/users/`, user)
+}
 
 export function updateProduct({commit}, product) {
   const id = product.id
@@ -138,7 +141,10 @@ export function updateProduct({commit}, product) {
   return axiosClient.post(`/products/${id}`, product)
 }
 
+export function updateUser({commit}, user) {
+  return axiosClient.put(`/users/${user.id}`, user)
+}
+
 export function deleteProduct({commit}, id) {
   return axiosClient.delete(`/products/${id}`);
 }
-

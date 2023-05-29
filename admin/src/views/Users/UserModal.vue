@@ -35,7 +35,7 @@
 
                       <header class="py-3 px-4 flex justify-between items-center">
                          <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
-                          {{ user.id ? `Update user: "${props.user.title}"` : 'Create new user' }}
+                          {{ user.id ? `Update user: "${props.user.name}"` : 'Create new user' }}
                         </DialogTitle>
                         <button 
                         @click="closeModal()"
@@ -43,16 +43,14 @@
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
-                  </svg>
+                         </svg>
                         </button>
                       </header>
                       <form @submit.prevent="onSubmit">
                         <div classs="bg-white px-4 pt-5 pb-4">
-                            <CustomInput class="mb-2" v-model="user.title" label="user Title"/>
-                            <CustomInput type="file" class="mb-2" label="user Image" @change="file => user.image= file"/>
-                            <CustomInput type="textarea" class="mb-2" v-model="user.description" label="Description"/>
-                            <CustomInput type="number" class="mb-2" v-model="user.price" label="Price" prepend="$"/>
-
+                            <CustomInput class="mb-2" v-model="user.name" label="Name"/>
+                            <CustomInput class="mb-2" v-model="user.email" label="Email"/>
+                            <CustomInput type="password" class="mb-2" v-model="user.password" label="Password"/>
                           </div>
                         <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                           <button type="submit"
@@ -92,10 +90,8 @@ import Spinner from "../../components/core/Spinner.vue";
 
 const user = ref({
   id: props.user.id,
-  title: props.user.title,
-  image: props.user.image,
-  description: props.user.description,
-  price: props.user.price
+  name: props.user.name,
+  email: props.user.email,
 })
 
 const loading = ref(false)
@@ -118,10 +114,8 @@ const show = computed({
 onUpdated(() => {
       user.value = {
         id: props.user.id,
-        title: props.user.title,
-        image: props.user.image,
-        description: props.user.description,
-        price: props.user.price
+        name: props.user.name,
+        email: props.user.email,
       }
 })
 
@@ -133,22 +127,22 @@ function closeModal() {
 function onSubmit() {
   loading.value = true
   if(user.value.id){
-    store.dispatch('updateProduct', user.value)
+    store.dispatch('updateUser', user.value)
     .then(response => {
       loading.value = false;
       if(response.status === 200){
         //TOD show notification
-        store.dispatch ('getProducts')
+        store.dispatch ('getUser')
         closeModal()
       }
     })
   }else{
-    store.dispatch('createProduct', user.value)
+    store.dispatch('createUser', user.value)
     .then(response => {
       loading.value = false;
       if(response.status === 201){
         //TODO show notification
-        store.dispatch('getProducts')
+        store.dispatch('getUsers')
         closeModal()
       }
 
