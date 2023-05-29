@@ -48,7 +48,7 @@
             sidebarOpened.value = window.outerWidth > 768;
         }
         onMounted(() => {
-          store.dispatch('getUser')
+          store.dispatch('getCurrentUser')
             handleSidebarOpened();
             window.addEventListener('resize', handleSidebarOpened);
         })
