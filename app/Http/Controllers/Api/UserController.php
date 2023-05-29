@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $search = request('search','');
         $perPage = request('per_page', 10);
-        $sortField = request('sort_field', 'created_at');
+        $sortField = request('sort_field', 'updated_at');
         $sortDirection = request('sort_direction', 'desc');
 
 

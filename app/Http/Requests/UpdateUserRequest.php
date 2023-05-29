@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['max:55'],
             'email' => ['email'],
-            'password' => ['nullable', Password::min(5)->numbers()->letters()]
+            'password' => ['nullable',\Illuminate\Validation\Rules\Password::min(8)->numbers()->letters()->symbols()]
         ];
     }
 }
