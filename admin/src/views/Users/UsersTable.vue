@@ -218,8 +218,8 @@
   getUsers();
 }
 
-function editUser(user) {
-  emit('clickEdit', user)
+function editUser(u) {
+  emit('clickEdit', u) 
 }
 
 function deleteUser(user) {

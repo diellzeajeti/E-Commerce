@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
-use Illuminate\Http\UploadedFile;
+
 
 class UserController extends Controller
 {
@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $search = request('search','');
         $perPage = request('per_page', 10);
-        $sortField = request('sort_field', 'created_at');
+        $sortField = request('sort_field', 'updated_at');
         $sortDirection = request('sort_direction', 'desc');
 
 
@@ -45,7 +45,9 @@ class UserController extends Controller
     {
        $data = $request->validated();
        $data['is_admin'] = true;
+       $data['email_verified_at'] = date('Y-m-d H:i:s');
        $data['password'] = Hash::make($data['password']);
+
        $data['created_by'] = $request->user()->id;
        $data['updated_by'] = $request->user()->id;
 
