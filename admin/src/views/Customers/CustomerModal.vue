@@ -16,7 +16,7 @@
   
         <div class="fixed z-10 inset-0 overflow-y-auto">
           <div
-            class="flex min-h-full items-center justify-center p-4 text-center"
+            class="flex min-h-full items-end sm:items-center justify-center p-4 text-center sm:p-0"
           >
             <TransitionChild
               as="template"
@@ -28,14 +28,14 @@
               leave-to="opacity-0 scale-95"
             >
               <DialogPanel
-                class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+                class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-[700px] sm:w-full"
               >
               <Spinner v-if="loading"
                         class="absolute left-0 top-0 bg-white right-0 bottom-0 flex items-center justify-center"/>
   
                         <header class="py-3 px-4 flex justify-between items-center">
                            <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
-                            {{ customer.id ? `Update customer: "${props.customer.name}"` : 'Create new customer' }}
+                            {{ customer.id ? `Update customer: "${props.customer.first_name} ${props.customer.last_name}"` : 'Create new customer' }}
                           </DialogTitle>
                           <button 
                           @click="closeModal()"
@@ -48,30 +48,37 @@
                         </header>
                         <form @submit.prevent="onSubmit">
                           <div classs="bg-white px-4 pt-5 pb-4">
-                              <CustomInput class="mb-2" v-model="customer.first_name" label="First Name"/>
-                              <CustomInput class="mb-2" v-model="customer.last_name" label="Last Name"/>
-                              <CustomInput class="mb-2" v-model="customer.email" label="Email"/>
-                              <CustomInput class="mb-2" v-model="customer.phone" label="Phone"/>
+                              <CustomInput class="mb-2 mx-2" v-model="customer.first_name" label="First Name"/>
+                              <CustomInput class="mb-2 mx-2" v-model="customer.last_name" label="Last Name"/>
+                              <CustomInput class="mb-2 mx-2" v-model="customer.email" label="Email"/>
+                              <CustomInput class="mb-2 mx-2" v-model="customer.phone" label="Phone"/>
                               <CustomInput type="checkbox" class="mb-2" v-model="customer.status" label="Status"/>
                               
                               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                  <h2 class="text-2xl font-semibold mt-6 pb-2 border-b border-gray-300">Billing Address</h2>
+                                  <h2 class="text-2xl font-semibold mt-6 pb-2 border-b border-gray-300 mx-2">Billing Address</h2>
 
-                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mx-2">
                                     <CustomInput  v-model="customer.billingAddress.address1" label="Address 1"/>
                                     <CustomInput  v-model="customer.billingAddress.address2" label="Address 2"/>
                                     <CustomInput  v-model="customer.billingAddress.city" label="City"/>
                                     <CustomInput  v-model="customer.billingAddress.zipcode" label="Zip code"/>
+
+                                    
+                                    <select v-model="customer.billingAddress.country">
+                                      <option  v-for="country of countries" :value="country.code">{{ country.name }}</option>
+                                    </select>
+
+
                                     <CustomInput  v-model="customer.billingAddress.country" label="Country"/>
                                     <CustomInput  v-model="customer.billingAddress.state" label="State"/>
                                   </div>      
                                 </div>
                                 
                                 <div>
-                                  <h2 class="text-2xl font-semibold mt-6 pb-2 border-b border-gray-300">Shipping Address</h2>
+                                  <h2 class="text-2xl font-semibold mt-6 pb-2 border-b border-gray-300 mx-2">Shipping Address</h2>
 
-                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mx-2">
                                     <CustomInput  v-model="customer.shippingAddress.address1" label="Address 1"/>
                                     <CustomInput  v-model="customer.shippingAddress.address2" label="Address 2"/>
                                     <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
@@ -140,6 +147,9 @@
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value)
   })
+
+
+  const countries = computed(()=> store.state.countries)
   
   onUpdated(() => {
         customer.value = {
@@ -167,6 +177,7 @@
   function onSubmit() {
     loading.value = true
     if(customer.value.id){
+      customer.value.status = !!customer.value.status
       store.dispatch('updateCustomer', customer.value)
       .then(response => {
         loading.value = false;
