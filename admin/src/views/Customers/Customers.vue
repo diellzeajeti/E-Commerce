@@ -14,11 +14,7 @@
    import store from "../../store";
 
    const DEFAULT_EMPTY_OBJECT = {
-    id:'',
-    title:'',
-    image:'',
-    description:'',
-    price:'',
+   
    }
    const showModal = ref(false)
    const customerModel = ref({...DEFAULT_EMPTY_OBJECT})
@@ -28,10 +24,13 @@
        showModal.value = true
    }
 
-   function editCustomer(u) {
-        customerModel.value = u;
+   function editCustomer(c) {
+    store.dispatch('getCustomer', c.id)
+        .then(({data}) => {
+        customerModel.value = data;
         showCustomerModal();
-      }
+      })
+   }  
   
 
   function onModalClose(){
