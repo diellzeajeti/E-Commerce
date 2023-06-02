@@ -7,15 +7,15 @@
        {{ prepend }}
    </span>
    <template v-if="type === 'select'">
-    <select :name="name"
+        <select :name="name"
               :required="required"
               :value="props.modelValue"
               :class="inputClasses"
-              @change="onChange($event.target.value)">
-               <option v-for="option of selectOptions" :value="option.key">{{option.text}}</option>
-            </select>
+              @change="emit('update:modelValue', $event.target.value)">
+            <option  v-for="option of selectOptions" :value="option.key">{{ option.text }}</option>
+        </select>
    </template>
-   <template v-if="type === 'textarea'">
+   <template v-else-if="type === 'textarea'">
     <textarea :name="name"
               :required="required"
               :value="props.modelValue"
@@ -87,7 +87,8 @@ const props = defineProps({
     append: {
         type: String,
         default: ''
-    }
+    },
+    selectOptions: Array
 })
 
 const id = computed(() => {

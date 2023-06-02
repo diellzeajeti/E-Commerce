@@ -64,13 +64,8 @@
                                     <CustomInput  v-model="customer.billingAddress.city" label="City"/>
                                     <CustomInput  v-model="customer.billingAddress.zipcode" label="Zip code"/>
 
-                                    
-                                    <select v-model="customer.billingAddress.country">
-                                      <option  v-for="country of countries" :value="country.code">{{ country.name }}</option>
-                                    </select>
 
-
-                                    <CustomInput  v-model="customer.billingAddress.country" label="Country"/>
+                                    <CustomInput  type="select" :select-options="countries" v-model="customer.billingAddress.country_code" label="Country"/>
                                     <CustomInput  v-model="customer.billingAddress.state" label="State"/>
                                   </div>      
                                 </div>
@@ -128,7 +123,8 @@
   
   console.log(props.customer);
   const customer = ref({
-    
+    billingAddress: {},
+    shippingAddress: {}
      })
   
   const loading = ref(false)
@@ -149,7 +145,7 @@
   })
 
 
-  const countries = computed(()=> store.state.countries)
+  const countries = computed(()=> store.state.countries.map(c => ({key: c.code, text: c.name})))
   
   onUpdated(() => {
         customer.value = {
