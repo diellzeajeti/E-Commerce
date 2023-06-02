@@ -14,7 +14,7 @@
           <div class="fixed inset-0 bg-black bg-opacity-75" />
         </TransitionChild>
   
-        <div class="fixed inset-0 overflow-y-auto">
+        <div class="fixed z-10 inset-0 overflow-y-auto">
           <div
             class="flex min-h-full items-center justify-center p-4 text-center"
           >
@@ -52,13 +52,13 @@
                               <CustomInput class="mb-2" v-model="customer.last_name" label="Last Name"/>
                               <CustomInput class="mb-2" v-model="customer.email" label="Email"/>
                               <CustomInput class="mb-2" v-model="customer.phone" label="Phone"/>
-                              <CustomInput class="mb-2" v-model="customer.status" label="Status"/>
+                              <CustomInput type="checkbox" class="mb-2" v-model="customer.status" label="Status"/>
                               
-                              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                   <h2 class="text-2xl font-semibold mt-6 pb-2 border-b border-gray-300">Billing Address</h2>
 
-                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     <CustomInput  v-model="customer.billingAddress.address1" label="Address 1"/>
                                     <CustomInput  v-model="customer.billingAddress.address2" label="Address 2"/>
                                     <CustomInput  v-model="customer.billingAddress.city" label="City"/>
@@ -71,7 +71,7 @@
                                 <div>
                                   <h2 class="text-2xl font-semibold mt-6 pb-2 border-b border-gray-300">Shipping Address</h2>
 
-                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     <CustomInput  v-model="customer.shippingAddress.address1" label="Address 1"/>
                                     <CustomInput  v-model="customer.shippingAddress.address2" label="Address 2"/>
                                     <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
