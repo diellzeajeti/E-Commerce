@@ -43,6 +43,12 @@
            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"/>
     <label :for="id" class="ml-2 block text-sm text-gray-900"> {{ label }} </label>
   </template>
+  <template v-else-if="type === 'checkbox'">
+    <input :id="id" :name="name" :type="type" :value="props.modelValue"
+    :required="required"
+    @input="emit('update:modelValue', $event.target.value)" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+    <label :for="id" class="ml-2 block text-sm text-gray-900"> {{ label }} </label>
+   </template>
    <template v-else>
     <input :type="type"
             :name="name"
@@ -52,7 +58,6 @@
             :class="inputClasses"
             :placeholder="label"
             step="0.01"/>
-
    </template>
    <span v-if="append"
    class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
@@ -85,6 +90,11 @@ const props = defineProps({
     }
 })
 
+const id = computed(() => {
+    if(props.id) return props.id;
+
+    return `id-${Math.floor(1000000 + Math.random() * 1000000)}`;
+})
 const inputClasses = computed( () => {
     const cls = [
     `block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`,
@@ -105,6 +115,7 @@ function onChange (value){
     emit('update:modelValue', value)
     emit('change', value)
 }
+
 </script>
 
 <style scoped>
