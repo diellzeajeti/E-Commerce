@@ -61,11 +61,17 @@
          <tr v-for="(customer, index) of customers.data" class="animate-fade-in-down" stle="{'animation-delay': `${index * 0.05}s`}">
            <td class="border-b p-2 ">{{ customer.id }}</td>
            <td class="border-b p-2 ">
-             {{  customer.name }}
+             {{  customer.first_name }}  {{  customer.last_name }}
            </td>
            <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{
                customer.email
              }}
+           </td>
+           <td class="border-b p-2">
+             {{ customer.phone }}
+           </td>
+           <td class="border-b p-2">
+             {{ customer.status }}
            </td>
            <td class="border-b p-2">
              {{ customer.created_at }}

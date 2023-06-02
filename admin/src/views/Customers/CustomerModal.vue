@@ -89,12 +89,10 @@
   import CustomInput from "../../components/core/CustomInput.vue";
   import Spinner from "../../components/core/Spinner.vue";
   
-  
+  console.log(props.customer);
   const customer = ref({
-    id: props.customer.id,
-    name: props.customer.name,
-    email: props.customer.email,
-  })
+    
+     })
   
   const loading = ref(false)
   
@@ -116,8 +114,11 @@
   onUpdated(() => {
         customer.value = {
           id: props.customer.id,
-          name: props.customer.name,
+          first_name: props.customer.first_name,
+          last_name: props.customer.last_name,
           email: props.customer.email,
+          phone: props.customer.phone,
+          status: props.customer.status,
         }
   })
   

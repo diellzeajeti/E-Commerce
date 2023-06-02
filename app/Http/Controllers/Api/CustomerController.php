@@ -10,7 +10,7 @@ use App\Models\CustomerAddress;
 use App\Http\Resources\CustomerListResource;
 use App\Http\Resources\CustomerResource;
 
-class ProductController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.

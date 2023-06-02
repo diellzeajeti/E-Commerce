@@ -33,10 +33,11 @@
        showModal.value = true
    }
 
-   function editUser(u) {
+   function editUser(u) {  
         userModel.value = u;
         showUserModal();
-      }
+        }
+      
   
 
   function onModalClose(){

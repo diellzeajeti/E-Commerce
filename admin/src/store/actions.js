@@ -155,6 +155,11 @@ export function getCustomers({commit,state}, {url = null, search ='',per_page, s
     commit('setCustomers', [false])
   })
 }
+
+export function getCustpmer({commit}, id) {
+  return axiosClient.get(`/customers/${id}`)
+}
+
 export function createCustomer({commit}, customer) {
   return axiosClient.post(`/customers/`, customer)
 }
