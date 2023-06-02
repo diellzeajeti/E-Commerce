@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\AddressType;
+use App\Enums\CustomerStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
@@ -27,7 +28,7 @@ class CustomerController extends Controller
 
         $query = Customer::query()
        //  ->where('title', 'like', "%{$search}%")
-        ->orderBy ($sortField, $sortDirection)
+        ->orderBy ("customers.$sortField", $sortDirection)
         ->paginate ($perPage);
         return CustomerListResource::collection($query);
     }
