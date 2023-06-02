@@ -33,6 +33,8 @@ const state = {
     limit: null,
     total: null
 },
+  countries: [],
+  
     orders:{
         loading:false,
         data: [],

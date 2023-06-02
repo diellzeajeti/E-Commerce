@@ -91,6 +91,11 @@ class CustomerController extends Controller
 
         return response()->noContent();
     }
+
+    public function countries()
+    {
+       return Country::query()->orderBy('name', 'asc')->get();
+    }
     
 }
 

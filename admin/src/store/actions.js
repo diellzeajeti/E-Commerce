@@ -28,7 +28,12 @@ export function logout({commit}) {
     })
 }
 
-
+export function getCountries({commit}){
+   return axiosClient.get('countries')
+   .then(({data}) => {
+    commit('setCountries', data)
+   })
+}
 
 export function getProducts({commit,state}, {url = null, search ='',per_page, sort_field, sort_direction} = {}) {
  
