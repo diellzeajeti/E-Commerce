@@ -6,6 +6,7 @@ use App\Enums\AddressType;
 use App\Enums\CustomerStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
+use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Http\Resources\CustomerListResource;
