@@ -52,7 +52,7 @@
                               <CustomInput class="mb-2 mx-2" v-model="customer.last_name" label="Last Name"/>
                               <CustomInput class="mb-2 mx-2" v-model="customer.email" label="Email"/>
                               <CustomInput class="mb-2 mx-2" v-model="customer.phone" label="Phone"/>
-                              <CustomInput type="checkbox" class="mb-2" v-model="customer.status" label="Status"/>
+                              <CustomInput type="checkbox" class="mb-2" v-model="customer.status" label="Active"/>
                               
                               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -187,6 +187,7 @@
   function onSubmit() {
     loading.value = true
     if(customer.value.id){
+      console.log(customer.value.status);
       customer.value.status = !!customer.value.status
       store.dispatch('updateCustomer', customer.value)
       .then(response => {
