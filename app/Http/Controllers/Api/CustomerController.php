@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Http\Resources\CustomerListResource;
 use App\Http\Resources\CustomerResource;
+use App\Http\Resources\CountryResource;
 
 class CustomerController extends Controller
 {
@@ -29,7 +30,7 @@ class CustomerController extends Controller
 
         $query = Customer::query()
        //  ->where('title', 'like', "%{$search}%")
-        ->orderBy ("customers.$sortField", $sortDirection)
+        ->orderBy ($sortField, $sortDirection)
         ->paginate ($perPage);
         return CustomerListResource::collection($query);
     }
@@ -95,7 +96,7 @@ class CustomerController extends Controller
 
     public function countries()
     {
-       return Country::query()->orderBy('name', 'asc')->get();
+       return CountryResource::collection(Country::query()->orderBy('name', 'asc')->get());
     }
     
 }

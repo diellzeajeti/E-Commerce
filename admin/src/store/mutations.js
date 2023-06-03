@@ -94,5 +94,5 @@ export function hideToast(state) {
 }
 
 export function setCountries(state, countries) {
-  state.countries = countries;
+  state.countries = countries.data;
 }

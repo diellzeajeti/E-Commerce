@@ -64,9 +64,10 @@
                                     <CustomInput  v-model="customer.billingAddress.city" label="City"/>
                                     <CustomInput  v-model="customer.billingAddress.zipcode" label="Zip code"/>
 
-
+                                   
                                     <CustomInput  type="select" :select-options="countries" v-model="customer.billingAddress.country_code" label="Country"/>
-                                    <CustomInput  v-model="customer.billingAddress.state" label="State"/>
+                                    <CustomInput v-if="!billingCountry.states" v-model="customer.billingAddress.state" label="State"/>
+                                    <CustomInput v-else type="select" :select-options="billingStateOptions" v-model="customer.billingAddress.state" label="State"/>
                                   </div>      
                                 </div>
                                 
@@ -78,8 +79,9 @@
                                     <CustomInput  v-model="customer.shippingAddress.address2" label="Address 2"/>
                                     <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
                                     <CustomInput  v-model="customer.shippingAddress.zipcode" label="Zip code"/>
-                                    <CustomInput  v-model="customer.shippingAddress.country" label="Country"/>
-                                    <CustomInput  v-model="customer.shippingAddress.state" label="State"/>
+                                    <CustomInput  type="select" :select-options="countries" v-model="customer.shippingAddress.country_code" label="Country"/>
+                                    <CustomInput v-if="!billingCountry.states" v-model="customer.shippingAddress.state" label="State"/>
+                                    <CustomInput v-else type="select" :select-options="shippingStateOptions" v-model="customer.shippingAddress.state" label="State"/>
                                   </div>      
                                 </div>
 
@@ -146,7 +148,19 @@
 
 
   const countries = computed(()=> store.state.countries.map(c => ({key: c.code, text: c.name})))
-  
+  const billingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.billingAddress.country_code))
+  const billingStateOptions = computed(() => {
+    if(!billingCountry.value || !billingCountry.value.states) return [];
+
+    return Object.entries(billingCountry.value.states).map(c => ({key: c[0], text: c[1]}))
+  })
+  const shippingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.shippingAddress.country_code))
+  const shippingStateOptions = computed(() => {
+    if(!shippingCountry.value || !shippingCountry.value.states) return [];
+
+    return Object.entries(shippingCountry.value.states).map(c => ({key: c[0], text: c[1]}))
+  })
+
   onUpdated(() => {
         customer.value = {
           id: props.customer.id,
