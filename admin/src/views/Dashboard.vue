@@ -4,7 +4,7 @@
 
         <!-- Active Customers -->
       <div class="bg-white py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
-        <label>Active Customers</label>
+        <label class="text-lg semibold  block mb-2">Active Customers</label>
         <template v-if="!loading.customersCount">
             <span class="text-3xl font-semibold block mb-2">{{ customersCount }}</span>
         </template>
@@ -14,7 +14,7 @@
 
        <!-- Active Products -->
        <div class="bg-white py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
-       <label>Active Products</label>
+       <label class="text-lg semibold  block mb-2">Active Products</label>
        <template v-if="!loading.productsCount">
         <span class="text-3xl font-semibold block mb-2">{{ productsCount }}</span>
         </template>
@@ -24,7 +24,7 @@
 
        <!-- Paid Orders -->
        <div class="bg-white py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
-       <label>Paid Orders</label>
+       <label class="text-lg semibold  block mb-2">Paid Orders</label>
        <template v-if="!loading.paidOrders">
         <span class="text-3xl font-semibold block mb-2">{{ paidOrders }}</span>
         </template>
@@ -35,7 +35,7 @@
 
       <!-- Total Income -->
       <div class="bg-white py-6 px-5 rounded-lg shadow flex flex-col items-center ">
-       <label>Total Income</label>
+       <label class="text-lg semibold  block mb-2">Total Income</label>
        <template v-if="!loading.totalIncome">
         <span class="text-3xl font-semibold block mb-2">{{ totalIncome }}</span>
         </template>
@@ -49,8 +49,17 @@
         <div class="col-span-2 row-span-6 bg-white py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
             Products 
         </div>
-    <div class=" col-span-2 row-span-6 bg-white  py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
-        Customers
+    <div class=" bg-white  py-6 px-5 rounded-lg shadow ">
+        <label class="text-lg semibold block mb-2">Latest Customers</label>
+       <router-link  to="/" v-for="c of latestCustomers" :key="c.id" class="mb-3 flex">
+        <div class="w-12 h-12 bg-gray-200 flex items-center justify-center rounded-full mr-2">
+            <UserIcon class="w-5"/>
+        </div>
+        <div>
+            <h3>{{ c.first_name }} {{ c.last_name }}</h3>
+            <p>{{ c.email }}</p>
+        </div>
+    </router-link>
     </div>
 
     </div>
@@ -58,6 +67,7 @@
 </template>
 
 <script setup>
+import { UserIcon } from '@heroicons/vue/outline'
 import axiosClient from "../axios";
 import {ref} from "vue";
 import Spinner from "../components/core/Spinner.vue"
@@ -67,11 +77,13 @@ const loading = ref( {
     productsCount: true,
     paidOrders: true,
     totalIncome: true,
+    latestCustomers: true
 })
 const customersCount = ref(0);
 const productsCount = ref(0);
 const paidOrders = ref(0);
 const totalIncome = ref(0);
+const latestCustomers = ref([]);
 
 axiosClient.get(`/dashboard/customers-count`).then(({data}) => {
     customersCount.value = data
@@ -91,6 +103,10 @@ axiosClient.get(`/dashboard/income-amount`).then(({data}) => {
     loading.value.totalIncome = false;
 })
 
+axiosClient.get(`/dashboard/latest-customers`).then(({data:customers}) => {
+   latestCustomers.value = customers;
+   loading.value.latestCustomers = false;
+})
 </script>
 
 <style scoped>
