@@ -31,15 +31,16 @@
       <!--/ Total Income -->
     </div>
       
-    <div class="grid grid-rows-2 grid-flow-col grid-cols-1 md:grid-cols-3 gap-3">
-        <div class="col-span-1 row-span-6 bg-white py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
+    <div class="grid grid-rows-3 grid-flow-col grid-cols-1 md:grid-cols-3 gap-14">
+        <div class="col-span-2 row-span-6 bg-white py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
             Products 
         </div>
-    <div class=" bg-white  py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
+    <div class=" col-span-2 row-span-6 bg-white  py-6 px-5 rounded-lg shadow flex flex-col items-center justify-center">
         Customers
     </div>
 
     </div>
+
 </template>
 
 <script>
