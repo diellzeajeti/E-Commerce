@@ -102,12 +102,13 @@
                >
                <div class="px-1 py-1">
                  <MenuItem v-slot="{ active }">
-                   <button
+                   <router-link
+                      :to="{name:'app.customers.view', params: {id: customer.id}}"
                          :class="[
                            active ? 'bg-indigo-600 text-white' : 'text-gray-900',
                            'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                          ]"
-                         @click="editCustomer(customer)"
+                        
                        >
                        <PencilIcon
                        :active="active"
@@ -115,7 +116,7 @@
                        aria-hidden="true"
                      />
                      Edit
-                   </button>
+                     </router-link>
                  </MenuItem>
                  <MenuItem v-slot="{ active }">
                    <button
@@ -230,10 +231,6 @@
        sortDirection.value = 'asc'
      }
      getCustomers();
-   }
-   
-   function editCustomer(u) {
-     emit('clickEdit', u) 
    }
    
    function deleteCustomer(customer) {
