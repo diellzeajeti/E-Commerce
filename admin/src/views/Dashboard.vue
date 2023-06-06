@@ -1,6 +1,10 @@
 <template>
-    <div class="mb-2">
+    <div class="mb-2 flex items-center justify-between">
         <h1 class="text-4xl mb-3 font-semibold"> Dashboard</h1>
+        <div class="flex items-center">
+         <label class="mr-2">Change Date Period</label>
+         <CustomInput type="select" v-model="chosenDate" @change="onDatePickerChange" :select-options="dateOptions"/>
+    </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
 
@@ -91,8 +95,21 @@
 <script setup>
 import { UserIcon } from '@heroicons/vue/outline'
 import axiosClient from "../axios";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import Spinner from "../components/core/Spinner.vue"
+import CustomInput from"../components/core/CustomInput.vue";
+
+
+const dateOptions = ref([
+{key: '2d', text: 'Last Day'},
+{key: '1w', text: 'Last Week'},
+{key: '2w', text: 'Last 2 Weeks'},
+{key: '1m', text: 'Last Month'},
+{key: '3m', text: 'Last 3 Months'},
+{key: '6m', text: 'Last 6 Months'},
+{key: 'all', text: 'All Time'},
+]);
+const chosenDate  =  ref('all')
 
 const loading = ref( {
     customersCount: true,
@@ -109,7 +126,20 @@ const totalIncome = ref(0);
 const latestCustomers = ref([]);
 const latestOrders = ref([]);
 
-axiosClient.get(`/dashboard/customers-count`).then(({data}) => {
+
+
+function updateDashboard(){
+    const d = chosenDate.value
+    loading.value = {
+    customersCount:true,
+    productsCount: true,
+    paidOrders: true,
+    totalIncome: true,
+    latestCustomers: true,
+    latestOrders: true
+
+    }
+    axiosClient.get(`/dashboard/customers-count`).then(({data}) => {
     customersCount.value = data
     loading.value.customersCount = false;
 })
@@ -135,6 +165,15 @@ axiosClient.get(`/dashboard/latest-orders`).then(({data:orders}) => {
    latestOrders.value = orders.data;
    loading.value.latestOrders = false;
 })
+}
+
+function onDatePickerChange(){
+updateDashboard()
+}
+
+onMounted( () => updateDashboard())
+
+
 </script>
 
 <style scoped>
