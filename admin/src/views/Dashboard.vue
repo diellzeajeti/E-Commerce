@@ -53,14 +53,13 @@
                     
                     <p>
                     <router-link :to="{name: 'app.orders.view', params: {id: o.id}}" class="text-indigo-700 font-semibold"> 
-                        Order  #{{ o.id }}  </router-link>
-                       contains {{ o.items }} items, {{ o.total_price }} 
+                        Order  #{{ o.id }}  </router-link> created {{ o.created_at }}. {{ o.items }} items
                     </p>
                     <p class="flex justify-between"> 
                         <span>
                             {{ o.first_name }} {{ o.last_name }}
                         </span>
-                        <span>{{ o.created_at }} </span>
+                        <span>{{ $filters.currencyUSD(o.total_price) }}  </span>
                     </p>
                     
                 </div>
