@@ -184,7 +184,7 @@
       import TableHeaderCell from '../../components/core/Table/TableHeaderCell.vue';
       import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
       import { DotsVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline';
-      import CustomerModal from './CustomerModal.vue';
+      import CustomerView from './CustomerView.vue';
    
       const emit = defineEmits(['clickEdit']);
    
