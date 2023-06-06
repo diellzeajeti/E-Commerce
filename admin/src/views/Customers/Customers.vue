@@ -3,13 +3,13 @@
       <h1 class="text-3xl font-semibold">Customers</h1>
      
     </div>
-    <CustomerModal v-model="showModal" :customer="customerModel" @close="onModalClose"/>
+    <CustomerView v-model="showModal" :customer="customerModel" @close="onModalClose"/>
     <CustomersTable @clickEdit="editCustomer"/>
 </template>
    
    <script setup>
    import CustomersTable from "./CustomersTable.vue"
-   import CustomerModal from "./CustomerModal.vue"
+   import CustomerView from "./CustomerView.vue"
    import {ref, computed, onMounted} from "vue";
    import store from "../../store";
 
