@@ -69,7 +69,7 @@
     <div class=" bg-white  py-6 px-5 rounded-lg shadow ">
         <label class="text-lg semibold block mb-2">Latest Customers</label>
        <template v-if="!loading.latestCustomers">
-        <router-link  to="/" v-for="c of latestCustomers" :key="c.id" class="mb-3 flex">
+        <router-link  to="{'app.customers.view', params: {id: c.id}}" v-for="c of latestCustomers" :key="c.id" class="mb-3 flex">
         <div class="w-12 h-12 bg-gray-200 flex items-center justify-center rounded-full mr-2">
             <UserIcon class="w-5"/>
         </div>
