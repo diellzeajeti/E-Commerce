@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Enums\AddresType;
 use App\Enums\CustomerStatus;
 use App\Enums\OrderStatus;
@@ -15,10 +16,9 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-   public function activeCustomers(Request $request)
+   public function activeCustomers()
    {
-      $d = $request->get('d');
-    return Customer::where('status', CustomerStatus::Active->value)->count();
+      return Customer::where('status', CustomerStatus::Active->value)->count();
    }
 
    public function activeProducts()
@@ -29,12 +29,25 @@ class DashboardController extends Controller
 
    public function paidOrders()
    {
-    return Order::where('status', OrderStatus::Paid->value)->count();
+      $fromDate = $this->getFromDate();
+      $query = Order::query()->where('status', OrderStatus::Paid->value);
+
+      if($fromDate) {
+         $query->where('created_at', '>', $fromDate);
+      }
+
+      return $query->count();
    }
 
    public function totalIncome()
    {
-    return Order::where('status', OrderStatus::Paid->value)->sum('total_price');
+      $fromDate = $this->getFromDate();  
+      $query = Order::query()->where('status', OrderStatus::Paid->value);
+
+    if ($fromDate) {
+      $query->where('created_at', '>', $fromDate);
+   }
+    return $query->sum('total_price');
    }
 
    public function latestCustomers()
@@ -65,4 +78,21 @@ class DashboardController extends Controller
          ->get()
       );
    }
+    
+   private function getFromDate()
+   {
+      $request = \request();
+      $paramDate = $request->get('d');
+      $array = [
+         '1d' => Carbon::now()->subDays(1),
+         '1k' => Carbon::now()->subDays(7),
+         '2k' => Carbon::now()->subDays(14),
+         '1m' => Carbon::now()->subDays(30),
+         '3m' => Carbon::now()->subDays(60),
+         '6m' => Carbon::now()->subDays(180),
+      ];
+
+      return $array[$paramDate] ?? null;
+   }
+
 }
