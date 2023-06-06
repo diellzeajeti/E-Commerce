@@ -101,7 +101,7 @@ import CustomInput from"../components/core/CustomInput.vue";
 
 
 const dateOptions = ref([
-{key: '2d', text: 'Last Day'},
+{key: '1d', text: 'Last Day'},
 {key: '1w', text: 'Last Week'},
 {key: '2w', text: 'Last 2 Weeks'},
 {key: '1m', text: 'Last Month'},
