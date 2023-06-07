@@ -85,9 +85,9 @@ const routes = [
                 name: 'app.orders.view',
                 component: OrderView
               }
-              
         ]
     },
+
     {
         path:'/:pathMatch(.*)',
         name:'notfound',
