@@ -70,12 +70,14 @@ import {useRoute, useRouter} from "vue-router";
 import CustomInput from "../../components/core/CustomInput.vue";
 const router = useRouter();
 const route = useRoute()
+
 const title = ref('');
 const customer = ref({
   billingAddress: {},
   shippingAddress: {}
 })
 const loading = ref(false)
+
 const countries = computed(() => store.state.countries.map(c => ({key: c.code, text: c.name})))
 const billingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.billingAddress.country_code))
 const billingStateOptions = computed(() => {
