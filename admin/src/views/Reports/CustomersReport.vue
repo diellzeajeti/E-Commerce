@@ -1,5 +1,5 @@
 <template>
-
+Customers Report
 </template>
 
 <script>
