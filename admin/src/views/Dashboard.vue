@@ -152,7 +152,11 @@ axiosClient.get(`/dashboard/orders-count`).then(({data}) => {
     loading.value.paidOrders = false;
 })
 axiosClient.get(`/dashboard/income-amount`).then(({data}) => {
-    totalIncome.value = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+    totalIncome.value = new Intl.NumberFormat('en-US', { 
+        style: 'currency', 
+        currency: 'USD' ,
+        minimumFractionDigits: 0
+    })
     .format(data);
     loading.value.totalIncome = false;
 })
