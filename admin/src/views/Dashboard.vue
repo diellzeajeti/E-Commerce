@@ -139,36 +139,31 @@ function updateDashboard(){
     latestOrders: true
 
     }
-    axiosClient.get(`/dashboard/customers-count`).then(({data}) => {
+    axiosClient.get(`/dashboard/customers-count`, {params: {d}}).then(({data}) => {
     customersCount.value = data
     loading.value.customersCount = false;
-})
-axiosClient.get(`/dashboard/products-count`).then(({data}) => {
-    productsCount.value = data
+  })
+  axiosClient.get(`/dashboard/products-count`, {params: {d}}).then(({data}) => {
+    productsCount.value = data;
     loading.value.productsCount = false;
-})
-axiosClient.get(`/dashboard/orders-count`).then(({data}) => {
-    paidOrders.value = data
+  })
+  axiosClient.get(`/dashboard/orders-count`, {params: {d}}).then(({data}) => {
+    paidOrders.value = data;
     loading.value.paidOrders = false;
-})
-axiosClient.get(`/dashboard/income-amount`).then(({data}) => {
-    totalIncome.value = new Intl.NumberFormat('en-US', { 
-        style: 'currency', 
-        currency: 'USD' ,
-        minimumFractionDigits: 0
-    })
-    .format(data);
+  })
+  axiosClient.get(`/dashboard/income-amount`, {params: {d}}).then(({data}) => {
+    totalIncome.value = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'})
+      .format(data);
     loading.value.totalIncome = false;
-})
-
-axiosClient.get(`/dashboard/latest-customers`).then(({data:customers}) => {
-   latestCustomers.value = customers;
-   loading.value.latestCustomers = false;
-})
-axiosClient.get(`/dashboard/latest-orders`).then(({data:orders}) => {
-   latestOrders.value = orders.data;
-   loading.value.latestOrders = false;
-})
+  })
+  axiosClient.get(`/dashboard/latest-customers`, {params: {d}}).then(({data: customers}) => {
+    latestCustomers.value = customers;
+    loading.value.latestCustomers = false;
+  })
+  axiosClient.get(`/dashboard/latest-orders`, {params: {d}}).then(({data: orders}) => {
+    latestOrders.value = orders.data;
+    loading.value.latestOrders = false;
+  })
 }
 
 function onDatePickerChange(){
