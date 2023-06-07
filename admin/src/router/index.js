@@ -12,9 +12,6 @@ import RequestPassword from "../views/RequestPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import store from '../store'
 import NotFound from "../views/NotFound.vue";
-import Report from "../views/Reports/Report.vue";
-import OrdersReport from "../views/Reports/OrdersReport.vue";
-import CustomersReport from "../views/Reports/CustomersReport.vue";
 
 const routes = [
     {
@@ -87,57 +84,10 @@ const routes = [
                 path: 'orders/:id',
                 name: 'app.orders.view',
                 component: OrderView
-              },
-              {
-                path: '/report',
-                name: 'reports',
-                component: Report,
-                meta: {
-                  requiresAuth: true
-                },
-          
-                children: [
-                  {
-                      path: 'orders',
-                      name: 'reports.orders',
-                      component: OrdersReport
-                  },
-          
-                  {
-                      path: 'customers',
-                      name: 'reports.customers',
-                      component: CustomersReport
-                  }
-                ]
-          
-              },
+              }
+              
         ]
     },
-
-    {
-      path: '/report',
-      name: 'report',
-      component: Report,
-      meta: {
-        requiresAuth: true
-      },
-
-      children: [
-        {
-            path: 'orders',
-            name: 'report.orders',
-            component: OrdersReport
-        },
-
-        {
-            path: 'customers',
-            name: 'report.customers',
-            component: CustomersReport
-        }
-      ]
-
-    },
-
     {
         path:'/:pathMatch(.*)',
         name:'notfound',
